@@ -34,8 +34,20 @@ Created automatically on first run. Edit it to change:
 
 ```json
 {
-  "db":   { "host": "192.168.1.140", "port": "3306", "name": "ess", "user": "root", "password": "..." },
-  "smtp": { "host": "smtp.gmail.com", "port": "587", "user": "...", "pass": "...", "from": "..." }
+  "db":   {
+    "host": "192.168.1.140", 
+    "port": "3306",
+    "name": "ess",
+    "user": "root",
+    "password": "..."
+  },
+  "smtp": {
+    "host": "smtp.gmail.com",
+    "port": "587",
+    "user": "...",
+    "pass": "...",
+    "from": "..."
+  }
 }
 ```
 
