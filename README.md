@@ -35,7 +35,7 @@ Created automatically on first run. Edit it to change:
 ```json
 {
   "db":   {
-    "host": "192.168.1.140", 
+    "host": "192.168.1.127", 
     "port": "3306",
     "name": "ess",
     "user": "root",
