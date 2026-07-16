@@ -1,12 +1,13 @@
-# Git clone Repo
-```powershell
-     git clone https://github.com/Posuza/ess-mo-deployment-02.git
-```
+
 # Servy Full-Stack Deployment Manager
 
 Automates installing the **ESS MO** app (Vue frontend + FastAPI backend + Caddy reverse proxy) as Windows services via [Servy](https://github.com/servy-community/servy).
 
 ---
+## Git clone Repo
+```powershell
+     git clone https://github.com/Posuza/ess-mo-deployment-02.git
+```
 
 ## Before you begin — config files
 
