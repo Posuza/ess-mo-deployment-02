@@ -2222,8 +2222,8 @@ function Invoke-Rollback {
 # ===========================================================
 function Get-Components {
     return @(
-        [PSCustomObject]@{ Num = 1; Key = "frontend"; Service = "ess-mo-frontend"; Display = "Frontend (Node / Vite)" }
-        [PSCustomObject]@{ Num = 2; Key = "backend";  Service = "ess-mo-backend";  Display = "Backend (FastAPI)" }
+        [PSCustomObject]@{ Num = 1; Key = "backend";  Service = "ess-mo-backend";  Display = "Backend (FastAPI)" }
+        [PSCustomObject]@{ Num = 2; Key = "frontend"; Service = "ess-mo-frontend"; Display = "Frontend (Node / Vite)" }
         [PSCustomObject]@{ Num = 3; Key = "caddy";    Service = "ess-mo-caddy";    Display = "Caddy reverse proxy" }
     )
 }
@@ -2493,7 +2493,7 @@ function Invoke-FullDeploy {
     $targetComponents = if ($script:headless -and $Components.Count -gt 0) {
         $Components
     } else {
-        @("frontend", "backend", "caddy")
+        @("backend", "frontend", "caddy")
     }
     $allSucceeded = $true
 
@@ -2510,20 +2510,6 @@ function Invoke-FullDeploy {
 
     Write-Step "Installing components"
 
-    if ($targetComponents -contains "frontend") {
-        Write-Host "  Frontend (port $($Config.FrontendPort))..." -ForegroundColor Gray
-        Start-Spinner "Installing Frontend ..."
-        $frontendOk = Install-Frontend -Config $Config
-        Stop-Spinner
-        if ($frontendOk) {
-            Write-Success "Frontend installed on port $($Config.FrontendPort)"
-            Write-Log "Frontend installed on port $($Config.FrontendPort)"
-        } else {
-            Write-Err "Frontend installation FAILED — skipping remaining components"
-            $allSucceeded = $false
-        }
-    }
-
     if ($allSucceeded -and $targetComponents -contains "backend") {
         # Backend install function now safely stops/uninstalls any existing backend service
         # and kills stale backend Python processes before replacing repo/venv.
@@ -2536,6 +2522,20 @@ function Invoke-FullDeploy {
             Write-Log "Backend installed on port $($Config.BackendPort)"
         } else {
             Write-Err "Backend installation FAILED — skipping remaining components"
+            $allSucceeded = $false
+        }
+    }
+
+    if ($allSucceeded -and $targetComponents -contains "frontend") {
+        Write-Host "  Frontend (port $($Config.FrontendPort))..." -ForegroundColor Gray
+        Start-Spinner "Installing Frontend ..."
+        $frontendOk = Install-Frontend -Config $Config
+        Stop-Spinner
+        if ($frontendOk) {
+            Write-Success "Frontend installed on port $($Config.FrontendPort)"
+            Write-Log "Frontend installed on port $($Config.FrontendPort)"
+        } else {
+            Write-Err "Frontend installation FAILED — skipping remaining components"
             $allSucceeded = $false
         }
     }

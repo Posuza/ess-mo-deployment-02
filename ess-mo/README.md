@@ -1,41 +1,53 @@
-# udpte version-2
 
 # Servy Full-Stack Deployment Manager
 
 Automates installing the **ESS MO** app (Vue frontend + FastAPI backend + Caddy reverse proxy) as Windows services via [Servy](https://github.com/servy-community/servy).
 
 ---
+## Git clone Repo
+```powershell
+     git clone https://github.com/Posuza/ess-mo-deployment-02.git
+```
 
-## 📋 Before you begin — config files
+## Before you begin — config files
 
 Edit these **before** your first deploy if your setup differs from the defaults.
 
 ### `deploy.config.json` — settings (ports, paths, repos)
 
-### `deploy.secrtes.json` — settings (credentials)
-
-Created automatically on first run. Edit it to change:
+Created automatically on first run. Edit it to change: 
 
 > ⚠️ **Do not use ports** `80`, `443`, `8080`, `3000`, `8000`, `5000` — these are typically taken by other services (IIS, web servers, dev tools). Pick free ports instead. The defaults (`3009`, `8009`, `8089`,....) any of such this never conflict.
 
-| Field | Default | What it does | Can be changed? |
-|---|---|---|---|
-| `FrontendRepo` | `Posuza/ESS_MO_Fronend` | Git repo for the Vue frontend | ✅ Replace with your own repo URL |
-| `BackendRepo` | `Posuza/ESS_MO_Backend` | Git repo for the FastAPI backend | ✅ Replace with your own repo URL |
-| `FrontendPort` | `3009` | Port the frontend serves on | ✅ Change if needed |
-| `BackendPort` | `8009` | Port the backend API runs on | ✅ Change if needed |
-| `CaddyPort` | `8089` | Port the reverse proxy listens on | ✅ Change if needed |
-| `ApiPrefix` | `/api/v1` | API path prefix | ✅ Any prefix starting with `/` (e.g. `/api`, `/v2`) |
-| `InstallRoot` | *(set at startup)* | Where files get installed (e.g. `C:\Ess_Mo`) | ✅ Set at startup or edit in config |
+```json
+      {
+      "FrontendRepo": "https://github.com/Posuza/ESS_MO_Fronend.git",
+      "BackendRepo": "https://github.com/Posuza/ESS_MO_Backend.git",
+      "FrontendPort": 3009,
+      "BackendPort": 8009,
+      "CaddyPort": 9089,
+      "ApiPrefix": "/api/v1"
+    }
+```
 
 ### `deploy.secrets.json` — credentials (DB, SMTP)
 
-Auto-gitignored. Copy `deploy.secrets.example.json` → `deploy.secrets.json` to pre-fill, or enter them when the script prompts you.
-
 ```json
 {
-  "db":   { "host": "192.168.1.140", "port": "3306", "name": "ess", "user": "root", "password": "..." },
-  "smtp": { "host": "smtp.gmail.com", "port": "587", "user": "...", "pass": "...", "from": "..." }
+  "db":   {
+    "host": "192.168.1.127", 
+    "port": "3306",
+    "name": "ess",
+    "user": "root",
+    "password": "..."
+  },
+  "smtp": {
+    "host": "smtp.gmail.com",
+    "port": "587",
+    "user": "...",
+    "pass": "...",
+    "from": "..."
+  }
 }
 ```
 
@@ -49,9 +61,6 @@ Auto-gitignored. Copy `deploy.secrets.example.json` → `deploy.secrets.json` to
 
 Before running the script, make sure your DB and SMTP credentials are ready.
 You can either:
-
-- **Pre-fill** `deploy.secrets.json` with your real values (copy from `deploy.secrets.example.json`)
-- **Or let the script prompt you** — it will ask for credentials at the start of the deployment
 
 > The script never blocks — if you skip entering credentials, it uses defaults that you can update later.
 
